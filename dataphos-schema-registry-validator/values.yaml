@@ -1,0 +1,8 @@
+# Default values for dataphos-schema-registry-validator.
+
+namespace: dataphos
+
+images:
+  validator: syntioinc/dataphos-schema-registry-validator:v1.0.0
+  xmlValidator: syntioinc/dataphos-schema-registry-xml-val:v1.0.0
+  csvValidator: syntioinc/dataphos-schema-registry-csv-val:v1.0.0

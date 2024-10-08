@@ -1,0 +1,54 @@
+
+
+# Namespace.
+namespace: dataphos
+
+# Images to use.
+images:
+  validator: syntioinc/dataphos-schema-registry-validator:v1.0.0
+  xmlValidator: syntioinc/dataphos-schema-registry-xml-val:v1.0.0
+  csvValidator: syntioinc/dataphos-schema-registry-csv-val:v1.0.0
+
+# XML Validator configuration.
+xmlValidator:
+  enable: true
+  replicas: 1
+
+# CSV Validator configuration.
+csvValidator:
+  enable: true
+  replicas: 1
+
+# Schema Registry URL to be referenced by the validator.
+schemaRegistryURL: "http://schema-registry-svc:8080"
+
+# The Validator.
+# The Persistor.
+# Each entry is a separate Validator instance.
+# A Validator instance needs to understand from which
+# broker it's pulling from and to which broker type it
+# should deliver successful/dead-lettered messages to.
+validator:
+
+  # Here is the definition of a single Validator object.
+  val1:
+    broker: someKafkaBroker
+    destinationBroker: someGCPBroker
+    topic: input-topic
+    consumerID: input-topic-sub
+    validTopic: valid-topic
+    deadletterTopic: deadletter-topic
+    serviceAccountSecret: pubsub-key
+    replicas: 1
+
+# The brokers to be used by the system.
+# Each entry is a separate broker definition.
+# This can be a reference to a GCP project or
+# a Kafka cluster, respectively.
+brokers:
+  someKafkaBroker:
+    type: kafka
+    brokerAddr: "some_addr"
+  someGCPBroker:
+    type: pubsub
+    projectID: dataphos-project-dev
