@@ -46,7 +46,7 @@ validator:
 # This can be a reference to a GCP project or
 # a Kafka cluster, respectively.
 brokers:
-  someKafkaBroker: 
+  someKafkaBroker:
     type: kafka
     brokerAddr: "some_addr"
   someGCPBroker:

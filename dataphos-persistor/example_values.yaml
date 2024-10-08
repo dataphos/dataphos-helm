@@ -92,7 +92,7 @@ persistor:
 # This can be a reference to a GCP project or
 # a Kafka cluster, respectively.
 brokers:
-  some-kafka: 
+  some-kafka:
     type: kafka
     brokerAddr: "some_addr"
   some-pubsub:
