@@ -1,0 +1,10 @@
+# Default values for dataphos-persistor.
+
+namespace: dataphos
+
+images:
+  persistor: syntioinc/dataphos-persistor-core:v1.0.0
+  indexer: syntioinc/dataphos-persistor-indexer:v1.0.0
+  indexerApi: syntioinc/dataphos-persistor-indexer-api:v1.0.0
+  indexerMongoDb: mongo:4.0
+  resubmitter: syntioinc/dataphos-persistor-resubmitter:v1.0.0
