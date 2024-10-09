@@ -3,7 +3,7 @@
 namespace: dataphos
 
 images:
-  initdb: syntioinc/dataphos-schema-registry-initdb:v1.0.0
-  registry: syntioinc/dataphos-schema-registry-api:v1.0.0
-  compatibilityChecker: syntioinc/dataphos-schema-registry-compatibility:v1.0.0
-  validityChecker: syntioinc/dataphos-schema-registry-validity:v1.0.0
+  initdb: syntioinc/dataphos-schema-registry-initdb:1.0.0
+  registry: syntioinc/dataphos-schema-registry-api:1.0.0
+  compatibilityChecker: syntioinc/dataphos-schema-registry-compatibility:1.0.0
+  validityChecker: syntioinc/dataphos-schema-registry-validity:1.0.0

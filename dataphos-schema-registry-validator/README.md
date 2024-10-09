@@ -10,9 +10,9 @@ Below is the list of configurable options in the `values.yaml` file.
 |-----------------------|---------|---------------------------------------------------------------------------------|-----------------------------------------------------|
 | namespace             | string  | The namespace to deploy the Schema Registry into.                               | `dataphos`                                          |
 | images                | object  | Docker images to use for each of the individual Schema Registry sub-components. |                                                     |
-| images.validator      | string  | The Schema Registry Validator image.                                                   | `syntioinc/dataphos-schema-registry-validator:v1.0.0`  |
-| images.xmlValidator   | string  | The XML Validator image.                                                        | `syntioinc/dataphos-schema-registry-xml-val:v1.0.0` |
-| images.csvValidator   | string  | The CSV Validator image.                                                        | `syntioinc/dataphos-schema-registry-csv-val:v1.0.0` |
+| images.validator      | string  | The Schema Registry Validator image.                                                   | `syntioinc/dataphos-schema-registry-validator:1.0.0`  |
+| images.xmlValidator   | string  | The XML Validator image.                                                        | `syntioinc/dataphos-schema-registry-xml-val:1.0.0` |
+| images.csvValidator   | string  | The CSV Validator image.                                                        | `syntioinc/dataphos-schema-registry-csv-val:1.0.0` |
 | xmlValidator          | object  | The XML Validator configuration.                                                |                                                     |
 | xmlValidator.enable   | boolean | Determines whether the XML validator should be enabled.                         | `true`                                              |
 | xmlValidator.replicas | integer | The number of XML Validator replicas.                                           | `1`                                                 |

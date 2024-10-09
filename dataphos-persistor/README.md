@@ -10,11 +10,11 @@ Below is the list of configurable options in the `values.yaml` file.
 |-----------------------|--------|---------------------------------------------------------------------------|---------------------------------------------------|
 | namespace             | string | The namespace to deploy the Schema Registry into.                         | `dataphos`                                        |
 | images                | object | Docker images to use for each of the individual Persistor sub-components. |                                                   |
-| images.persistor      | string | The Persistor image.                                                      | `syntioinc/dataphos-persistor-core:v1.0.0`        |
-| images.indexer        | string | The Indexer image.                                                        | `syntioinc/dataphos-persistor-indexer:v1.0.0`     |
-| images.indexerApi     | string | The Indexer API image.                                                    | `syntioinc/dataphos-persistor-indexer-api:v1.0.0` |
+| images.persistor      | string | The Persistor image.                                                      | `syntioinc/dataphos-persistor-core:1.0.0`        |
+| images.indexer        | string | The Indexer image.                                                        | `syntioinc/dataphos-persistor-indexer:1.0.0`     |
+| images.indexerApi     | string | The Indexer API image.                                                    | `syntioinc/dataphos-persistor-indexer-api:1.0.0` |
 | images.indexerMongoDb | string | The Mongo image to be used by the indexer.                                | `mongo:4.0`                                       |
-| images.resubmitter    | string | The Resubmitter image.                                                    | `syntioinc/dataphos-persistor-resubmitter:v1.0.0` |
+| images.resubmitter    | string | The Resubmitter image.                                                    | `syntioinc/dataphos-persistor-resubmitter:1.0.0` |
 
 ### Broker Configuration
 

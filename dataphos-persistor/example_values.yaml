@@ -6,11 +6,11 @@ namespace: dataphos
 
 # Images.
 images:
-  persistor: syntioinc/dataphos-persistor-core:v1.0.0
-  indexer: syntioinc/dataphos-persistor-indexer:v1.0.0
-  indexerApi: syntioinc/dataphos-persistor-indexer-api:v1.0.0
+  persistor: syntioinc/dataphos-persistor-core:1.0.0
+  indexer: syntioinc/dataphos-persistor-indexer:1.0.0
+  indexerApi: syntioinc/dataphos-persistor-indexer-api:1.0.0
   indexerMongoDb: mongo:4.0
-  resubmitter: syntioinc/dataphos-persistor-resubmitter:v1.0.0
+  resubmitter: syntioinc/dataphos-persistor-resubmitter:1.0.0
 
 # Indexer.
 # Each entry in this object is considered
