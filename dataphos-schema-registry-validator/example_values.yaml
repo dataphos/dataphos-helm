@@ -5,9 +5,9 @@ namespace: dataphos
 
 # Images to use.
 images:
-  validator: syntioinc/dataphos-schema-registry-validator:v1.0.0
-  xmlValidator: syntioinc/dataphos-schema-registry-xml-val:v1.0.0
-  csvValidator: syntioinc/dataphos-schema-registry-csv-val:v1.0.0
+  validator: syntioinc/dataphos-schema-registry-validator:1.0.0
+  xmlValidator: syntioinc/dataphos-schema-registry-xml-val:1.0.0
+  csvValidator: syntioinc/dataphos-schema-registry-csv-val:1.0.0
 
 # XML Validator configuration.
 xmlValidator:

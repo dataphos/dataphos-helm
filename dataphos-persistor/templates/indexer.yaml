@@ -147,7 +147,7 @@ data:
     MONGO_COLLECTION: "indexer_collection"
 
     # Batch settings.
-    BATCHSETTINGS_BATCHSIZE: "{{ $target.batchSize | default 10000 }}"
+    BATCHSETTINGS_BATCHSIZE: "{{ $target.batchSize | default 5000 }}"
     BATCHSETTINGS_BATCHMEMORY: "{{ $target.batchMemory | default 1000000 }}"
     BATCHSETTINGS_BATCHTIMEOUT: {{ $target.batchTimeout | default "30s" }}
 

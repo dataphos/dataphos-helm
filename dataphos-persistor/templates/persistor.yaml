@@ -64,9 +64,7 @@ data:
   STORAGE_TOPICID: {{ $target.topic }}
   STORAGE_PREFIX: {{ $target.storagePrefix | default "msg" }}
   STORAGE_MSGEXTENSION: "avro"
-  STORAGE_VERSIONKEY: {{ $target.storageVersionKey | default "" }}
   STORAGE_MASK: "{{ $target.storageMask | default "year/month/day/hour" }}"
-  STORAGE_WRITETIMEOUT: "300s"
   STORAGE_CUSTOMVALUES: {{ $target.storageCustomValues | default "" }}
   {{- if eq $storage.type "abs" }}
   STORAGE_STORAGEACCOUNTID: {{ $storage.accountStorageID }}
@@ -76,7 +74,7 @@ data:
   {{- end }}
 
   # Batch settings.
-  BATCHSETTINGS_BATCHSIZE: "{{ $target.batchSize | default 10000 }}"
+  BATCHSETTINGS_BATCHSIZE: "{{ $target.batchSize | default 5000 }}"
   BATCHSETTINGS_BATCHMEMORY: "{{ $target.batchMemory | default 1000000 }}"
   BATCHSETTINGS_BATCHTIMEOUT: {{ $target.batchTimeout | default "30s" }}
 
