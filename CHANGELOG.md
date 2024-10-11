@@ -2,6 +2,11 @@
 
 ## 1.0.0 (2024-10-11)
 
+**Contributors:** 
+[@labramusiq](https://github.com/labramusiq),
+[@robe-rt](https://github.com/robe-rt),
+[@FilipMilic11](https://github.com/FilipMilic11),
+[@Skenktio](https://github.com/Skenktio)
 
 ### ⚠ BREAKING CHANGES
 
