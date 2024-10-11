@@ -23,7 +23,6 @@ csvValidator:
 schemaRegistryURL: "http://schema-registry-svc:8080"
 
 # The Validator.
-# The Persistor.
 # Each entry is a separate Validator instance.
 # A Validator instance needs to understand from which
 # broker it's pulling from and to which broker type it
