@@ -10,7 +10,7 @@ metadata:
   name: per-rsb-{{ $rsb }}-config
   namespace: {{ $.Values.namespace }}
 data:
-  INDEXER_URL: "http://persistor-idx-api-svc-{{ $target.indexer }}.{{ $.Values.namespace }}.svc.cluster.local:8080"
+  INDEXER_URL: "http://per-idx-api-{{ $target.indexer }}-svc.{{ $.Values.namespace }}.svc.cluster.local:8080"
   {{- if $isGcp }}
   PUBSUB_PROJECT_ID: {{ $storage.projectID | default $broker.projectID }}
   {{- else if $isAzure }}
