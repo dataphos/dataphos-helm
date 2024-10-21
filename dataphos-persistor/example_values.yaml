@@ -12,6 +12,11 @@ images:
   indexerMongoDb: mongo:4.0
   resubmitter: syntioinc/dataphos-persistor-resubmitter:1.0.0
 
+registryCredentials:
+- registry: some.registry
+  username: someuser
+  password: somepassword
+
 # Indexer.
 # Each entry in this object is considered
 # a separate Indexer instance.

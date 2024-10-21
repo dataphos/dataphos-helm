@@ -36,6 +36,10 @@ spec:
       containers:
         - name: validator-csv
           image: {{ .Values.images.csvValidator }}
+      {{- if .Values.registryCredentials }}
+      imagePullSecrets:
+      - name: {{ regexFind "^[a-zA-Z][^/]*" .Values.images.csvValidator | replace "." "-" | lower }}-pull-secret
+      {{- end }}
 ---
 {{- end}}
 
@@ -76,4 +80,8 @@ spec:
       containers:
         - name: validator-xml
           image: {{ .Values.images.xmlValidator }}
+      {{- if .Values.registryCredentials }}
+      imagePullSecrets:
+      - name: {{ regexFind "^[a-zA-Z][^/]*" .Values.images.xmlValidator | replace "." "-" | lower }}-pull-secret
+      {{- end }}
 {{- end}}

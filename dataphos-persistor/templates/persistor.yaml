@@ -115,6 +115,10 @@ spec:
           secret:
             secretName: {{ $target.serviceAccountSecret }}
       {{- end }}
+      {{- if $.Values.registryCredentials }}
+      imagePullSecrets:
+      - name: {{ regexFind "^[a-zA-Z][^/]*" $.Values.images.persistor | replace "." "-" | lower }}-pull-secret
+      {{- end }}
 ---
 {{- if $target.serviceAccountKey }}
 apiVersion: v1

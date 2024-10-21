@@ -6,20 +6,24 @@ The Helm Chart for the Dataphos Schema Registry Validator component.
 
 Below is the list of configurable options in the `values.yaml` file.
 
-| Variable              | Type    | Description                                                                     | Default                                             |
-|-----------------------|---------|---------------------------------------------------------------------------------|-----------------------------------------------------|
-| namespace             | string  | The namespace to deploy the Schema Registry into.                               | `dataphos`                                          |
-| images                | object  | Docker images to use for each of the individual Schema Registry sub-components. |                                                     |
-| images.validator      | string  | The Schema Registry Validator image.                                                   | `syntioinc/dataphos-schema-registry-validator:1.0.0`  |
-| images.xmlValidator   | string  | The XML Validator image.                                                        | `syntioinc/dataphos-schema-registry-xml-val:1.0.0` |
-| images.csvValidator   | string  | The CSV Validator image.                                                        | `syntioinc/dataphos-schema-registry-csv-val:1.0.0` |
-| xmlValidator          | object  | The XML Validator configuration.                                                |                                                     |
-| xmlValidator.enable   | boolean | Determines whether the XML validator should be enabled.                         | `true`                                              |
-| xmlValidator.replicas | integer | The number of XML Validator replicas.                                           | `1`                                                 |
-| csvValidator          | object  | The CSV Validator configuration.                                                |                                                     |
-| csvValidator.enable   | boolean | Determines whether the CSV validator should be enabled.                         | `true`                                              |
-| csvValidator.replicas | integer | The number of CSV Validator replicas.                                           | `1`                                                 |
-| schemaRegistryURL     | string  | The link to the Schema Registry component.                                      | `http://schema-registry-svc:8080`                   |
+| Variable                     | Type    | Description                                                                     | Default                                              |
+| ---------------------------- | ------- | ------------------------------------------------------------------------------- | ---------------------------------------------------- |
+| namespace                    | string  | The namespace to deploy the Schema Registry into.                               | `dataphos`                                           |
+| images                       | object  | Docker images to use for each of the individual Schema Registry sub-components. |                                                      |
+| images.validator             | string  | The Schema Registry Validator image.                                            | `syntioinc/dataphos-schema-registry-validator:1.0.0` |
+| images.xmlValidator          | string  | The XML Validator image.                                                        | `syntioinc/dataphos-schema-registry-xml-val:1.0.0`   |
+| images.csvValidator          | string  | The CSV Validator image.                                                        | `syntioinc/dataphos-schema-registry-csv-val:1.0.0`   |
+| registryCredentials          | list    | Private Docker registry credentials used to create image pull secrets.          |                                                      |
+| registryCredentials.registry | string  | The name of the chosen Docker image registry.                                   |                                                      |
+| registryCredentials.username | string  | The name of an account with `pull` permissions.                                 |                                                      |
+| registryCredentials.password | string  | The account password.                                                           |                                                      |
+| xmlValidator                 | object  | The XML Validator configuration.                                                |                                                      |
+| xmlValidator.enable          | boolean | Determines whether the XML validator should be enabled.                         | `true`                                               |
+| xmlValidator.replicas        | integer | The number of XML Validator replicas.                                           | `1`                                                  |
+| csvValidator                 | object  | The CSV Validator configuration.                                                |                                                      |
+| csvValidator.enable          | boolean | Determines whether the CSV validator should be enabled.                         | `true`                                               |
+| csvValidator.replicas        | integer | The number of CSV Validator replicas.                                           | `1`                                                  |
+| schemaRegistryURL            | string  | The link to the Schema Registry component.                                      | `http://schema-registry-svc:8080`                    |
 
 ### Broker Configuration
 
@@ -27,7 +31,7 @@ The `values.yaml` file contains a `brokers` object used to set up the key refere
 connect to one or more brokers deemed as part of the overall platform infrastructure.
 
 | Variable                           | Type   | Description                                                                                                     | Applicable If          |
-|------------------------------------|--------|-----------------------------------------------------------------------------------------------------------------|------------------------|
+| ---------------------------------- | ------ | --------------------------------------------------------------------------------------------------------------- | ---------------------- |
 | brokers                            | object | The object containing the general information on the brokers the validator service will want to associate with. |                        |
 | brokers.BROKER_ID                  | object | The object representing an individual broker's configuration.                                                   |                        |
 | brokers.BROKER_ID.type             | string | Denotes the broker's type.                                                                                      |                        |
@@ -41,7 +45,7 @@ The `values.yaml` file contains a `validator` object used to configure one or mo
 the release, explicitly referencing brokers defined in the previous section.
 
 | Variable                              | Type   | Description                                                                                                                           | Applicable If                        |
-|---------------------------------------|--------|---------------------------------------------------------------------------------------------------------------------------------------|--------------------------------------|
+| ------------------------------------- | ------ | ------------------------------------------------------------------------------------------------------------------------------------- | ------------------------------------ |
 | validator                             | object | The object containing the information on all of the validators to be deployed as part of the Helm installation.                       |                                      |
 | validator.VAL_ID                      | object | The object representing the individual validator's configuration.                                                                     |                                      |
 | validator.VAL_ID.broker               | string | Reference to the broker messages are pulled FROM.                                                                                     |                                      |
@@ -58,13 +62,14 @@ the release, explicitly referencing brokers defined in the previous section.
 
 Below is the list of resources created by this chart.
 
-| Resource type | Resource name                  |
-|---------------|--------------------------------|
-| Deployment    | scval-`[scval_id]`             |
-| Service       | scval-`[scval_id]`-metrics-svc |
-| ConfigMap     | scval-`[scval_id]`-config      |
-| Secret        | `[scval_id]`-gcp-sa-key        |
-| Deployment    | validator-csv                  |
-| Service       | validator-csv-svc              |
-| Deployment    | validator-xml                  |
-| Service       | validator-xml-svc              |
+| Resource type | Resource name                                  |
+| ------------- | ---------------------------------------------- |
+| Deployment    | scval-`[scval_id]`                             |
+| Service       | scval-`[scval_id]`-metrics-svc                 |
+| ConfigMap     | scval-`[scval_id]`-config                      |
+| Secret        | `[scval_id]`-gcp-sa-key                        |
+| Deployment    | validator-csv                                  |
+| Service       | validator-csv-svc                              |
+| Deployment    | validator-xml                                  |
+| Service       | validator-xml-svc                              |
+| Secret        | `[registryCredentials.repository]`-pull-secret |

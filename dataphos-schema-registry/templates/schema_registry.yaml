@@ -216,3 +216,16 @@ spec:
           ports:
             - name: validity
               containerPort: 8089
+      {{- if .Values.registryCredentials }}
+      {{- $registrySecretNames := list -}}
+      {{- range $key, $url := .Values.images }}
+      {{- $registrySecretName := printf "%s-pull-secret" (regexFind "^[a-zA-Z][^/]*" $url) | replace "." "-" | lower -}}
+      {{- if not (has $registrySecretName $registrySecretNames) }}
+      {{- $registrySecretNames = append $registrySecretNames $registrySecretName -}}
+      {{- end }}
+      {{- end }}
+      imagePullSecrets:
+      {{- range $registrySecretNames }}
+      - name: {{ . }}
+      {{- end }}
+      {{- end }}

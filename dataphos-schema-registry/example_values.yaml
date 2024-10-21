@@ -10,6 +10,11 @@ images:
   compatibilityChecker: syntioinc/dataphos-schema-registry-compatibility:1.0.0
   validityChecker: syntioinc/dataphos-schema-registry-validity:1.0.0
 
+registryCredentials:
+- registry: some.registry
+  username: someuser
+  password: somepassword
+
 # Number of replicas of the Schema Registry API.
 registryReplicas: 1
 
