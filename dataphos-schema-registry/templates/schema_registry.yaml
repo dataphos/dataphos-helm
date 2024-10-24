@@ -4,7 +4,7 @@ metadata:
   name: schema-history-secret
   namespace: {{ .Values.namespace }}
 stringData:
-  POSTGRES_PASSWORD: {{ .Values.database.password }}
+  POSTGRES_PASSWORD: {{ ((.Values.database).password) | default "POSTGRES_PASSWORD" }}
   PGDATA: /var/lib/postgresql/data/pgdata
 ---
 apiVersion: v1
@@ -15,9 +15,9 @@ metadata:
 stringData:
   SR_HOST: schema-history-svc
   SR_TABLE_PREFIX: syntio_schema.
-  SR_DBNAME: {{ .Values.database.name }}
-  SR_USER: {{ .Values.database.username }}
-  SR_PASSWORD: {{ .Values.database.password }}
+  SR_DBNAME: {{ ((.Values.database).name) | default "postgres" }}
+  SR_USER: {{ ((.Values.database).username) | default "postgres" }}
+  SR_PASSWORD: {{ ((.Values.database).password) | default "POSTGRES_PASSWORD" }}
   SERVER_PORT: "8080"
 ---
 apiVersion: v1
