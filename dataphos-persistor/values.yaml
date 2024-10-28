@@ -66,7 +66,7 @@ indexer:
     replicas: 1
     consumerReplicas: 1
     storageSize: 1Gi
-    mongoConnectionString: 
+    mongoConnectionString:
 
 ## The object containing the information on all of the resubmitter services to be deployed as part of the Helm installation.
 ##
@@ -82,7 +82,7 @@ resubmitter:
     broker: someKafkaBroker
     storage: someGCSStorage
     indexer: kafkaIndexer
-    serviceAccountSecret: 
+    serviceAccountSecret:
   ## @param RSMB_ID.clientID The Client ID of the Azure Service Principal with the required role assignments.
   ## @param RSMB_ID.clientSecret The Client Secret of the Azure Service Principal with the required role assignments.
   ## @param RSMB_ID.tenantID The Tenant ID of the Azure Service Principal with the required role assignments.
@@ -108,7 +108,7 @@ persistor:
   ## @param PES_ID.deadletterTopic The name of the dead-letter topic used for failed data processing. If not set, dead-lettering is disabled (must be enabled if kafka broker is used).
   ## @param PES_ID.replicas The number of replicas of a given Persistor instance to pull/process messages simultaneously.
   ## @param PES_ID.storageCustomValues Comma-separated list of key:value pairs to include in the file path. If the file path contains key1:value1 and STORAGE_MASK contains key1, then the path will contain value1.
-  ## @param PES_ID.storageMask Structure of the path under which batches are stored. 
+  ## @param PES_ID.storageMask Structure of the path under which batches are stored.
   ## @param RSMB_ID.clientID The Client ID of the Azure Service Principal with the required role assignments.
   ## @param RSMB_ID.clientSecret The Client Secret of the Azure Service Principal with the required role assignments.
   ## @param RSMB_ID.tenantID The Tenant ID of the Azure Service Principal with the required role assignments.

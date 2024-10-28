@@ -28,7 +28,7 @@ registrySvcName: schema-registry-svc
 ## @param database.name History database name.
 ## @param database.username History database username.
 ## @param database.password History database password.
-## 
+##
 database:
   name: postgres
   username: postgres

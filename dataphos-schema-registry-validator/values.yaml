@@ -76,14 +76,14 @@ brokers:
   ##
   someKafkaBroker:
     type: kafka
-    brokerAddr: 
+    brokerAddr:
   ## @param BROKER_ID.projectID The GCP project ID.
   ##
   somePubSubBroker:
     type: pubsub
-    projectID: 
+    projectID:
   ## @param BROKER_ID.connectionString The Azure Service Bus Namespace connection string.
   ##
   someServiceBusBroker:
     type: servicebus
-    connectionString: 
+    connectionString:
