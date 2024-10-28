@@ -188,4 +188,3 @@ storage:
   ## someGcsStorage:
   ##   type: gcs
   ##   projectID:
-  
