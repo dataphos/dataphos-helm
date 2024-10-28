@@ -1,4 +1,5 @@
 {{- range $per, $target := .Values.persistor }}
+{{- $per := kebabcase $per -}}
 {{- $broker := get $.Values.brokers $target.broker -}}
 {{- $storage := get $.Values.storage $target.storage -}}
 {{- $indexer := get ($.Values.indexer | default dict) ($target.indexer | default "") | default dict -}}
@@ -7,11 +8,13 @@
 {{- $isGcp := or (or (eq $broker.type "pubsub") (eq  $storage.type "gcs" )) (eq $senderBrokerType "pubsub") -}}
 {{- $enableIndexer := $target.indexer -}}
 {{- $enableDeadletter := $target.deadletterTopic -}}
+{{- $namespace := $.Values.namespace | default "dataphos" -}}
+{{- $persistor := (($.Values.images).persistor) | default "syntioinc/dataphos-persistor-core:1.0.0" -}}
 apiVersion: v1
 kind: ConfigMap
 metadata:
   name: per-{{ $per }}-config
-  namespace: {{ $.Values.namespace | default "dataphos" }}
+  namespace: {{ $namespace }}
 data:
   # Reader configuration.
   READER_TYPE: {{ $broker.type }}
@@ -64,7 +67,7 @@ data:
   STORAGE_TOPICID: {{ $target.topic }}
   STORAGE_PREFIX: {{ $target.storagePrefix | default "msg" }}
   STORAGE_MSGEXTENSION: "avro"
-  STORAGE_MASK: "{{ $target.storageMask | default "year/month/day/hour" }}"
+  STORAGE_MASK: {{ $target.storageMask | default "year/month/day/hour" | quote }}
   STORAGE_CUSTOMVALUES: {{ $target.storageCustomValues | default "" }}
   {{- if eq $storage.type "abs" }}
   STORAGE_STORAGEACCOUNTID: {{ $storage.accountStorageID }}
@@ -74,8 +77,8 @@ data:
   {{- end }}
 
   # Batch settings.
-  BATCHSETTINGS_BATCHSIZE: "{{ $target.batchSize | default 5000 }}"
-  BATCHSETTINGS_BATCHMEMORY: "{{ $target.batchMemory | default 1000000 }}"
+  BATCHSETTINGS_BATCHSIZE: {{ $target.batchSize | default 5000 | quote }}
+  BATCHSETTINGS_BATCHMEMORY: {{ $target.batchMemory | default 1000000 | quote }}
   BATCHSETTINGS_BATCHTIMEOUT: {{ $target.batchTimeout | default "30s" }}
 
   MINIMUM_LOG_LEVEL: "INFO"
@@ -84,7 +87,7 @@ apiVersion: apps/v1
 kind: Deployment
 metadata:
   name: per-{{ $per }}
-  namespace: {{ $.Values.namespace | default "dataphos" }}
+  namespace: {{ $namespace }}
 spec:
   replicas: {{ $target.replicas | default 1 }}
   selector:
@@ -97,7 +100,7 @@ spec:
     spec:
       containers:
         - name: persistor
-          image: {{ $.Values.images.persistor | default "syntioinc/dataphos-persistor-core:1.0.0" }}
+          image: {{ $persistor }}
           envFrom:
             - configMapRef:
                 name: per-{{ $per }}-config
@@ -123,7 +126,7 @@ data:
   key.json: {{ $target.serviceAccountKey }}
 metadata:
   name: {{ $target.serviceAccountSecret }}
-  namespace: {{ $.Values.namespace | default "dataphos" }}
+  namespace: {{ $namespace }}
 type: Opaque
 {{- end }}
 ---
@@ -131,7 +134,7 @@ apiVersion: v1
 kind: Service
 metadata:
   name: "per-{{ $per }}-metrics-svc"
-  namespace: {{ $.Values.namespace | default "dataphos" }}
+  namespace: {{ $namespace }}
   labels:
     app: per-{{ $per }}
 spec:

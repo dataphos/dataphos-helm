@@ -39,34 +39,35 @@ indexer:
     topic: idx-topic
     consumerID: idx-topic-sub
     deadletterTopic: idx-dl-topic
-    replicas: 1 # Scale the service exposing the metadata
-    consumerReplicas: 1 # Scale the consumers reading and storing the metadata
+    replicas: 1
+    consumerReplicas: 1
     storageSize: 1Gi
     batchSize: 5000
     batchMemory: 1000000
     batchTimeout: 30s
+  ## Furhter Indexer examples.
   ## @param IDX_ID.serviceAccountSecret The reference to a secret that contains a key.json key and the contents of a Google Service Account JSON file as its contents.
   ##
-  pubsubIndexer:
-    broker: somePubSubBroker
-    topic: idx-topic
-    consumerID: idx-topic-sub
-    deadletterTopic: idx-dl-topic
-    replicas: 1 # Scale the service exposing the metadata
-    consumerReplicas: 1 # Scale the consumers reading and storing the metadata
-    storageSize: 1Gi
-    serviceAccountSecret:
+  ## pubSubIndexer:
+  ##   broker: somePubSubBroker
+  ##   topic: idx-topic
+  ##   consumerID: idx-topic-sub
+  ##   deadletterTopic: idx-dl-topic
+  ##   replicas: 1
+  ##   consumerReplicas: 1
+  ##   storageSize: 1Gi
+  ##   serviceAccountSecret:
   ## @param IDX_ID.mongoConnectionString An optional MongoDB connection string if using an external database. If this value is not set, a MongoDB instance will be deployed on the same cluster.
   ##
-  externalMongoIndexer:
-    broker: somePubSubBroker
-    topic: idx-topic
-    consumerID: idx-topic-sub
-    deadletterTopic: idx-dl-topic
-    replicas: 1
-    consumerReplicas: 1
-    storageSize: 1Gi
-    mongoConnectionString:
+  ## externalMongoIndexer:
+  ##   broker: somePubSubBroker
+  ##   topic: idx-topic
+  ##   consumerID: idx-topic-sub
+  ##   deadletterTopic: idx-dl-topic
+  ##   replicas: 1
+  ##   consumerReplicas: 1
+  ##   storageSize: 1Gi
+  ##   mongoConnectionString:
 
 ## The object containing the information on all of the resubmitter services to be deployed as part of the Helm installation.
 ##
@@ -76,24 +77,25 @@ resubmitter:
   ## @param RSMB_ID.broker Reference to the broker resubmitted messages will be sent to.
   ## @param RSMB_ID.storage Reference to the storage the resubmitter service can connect to.
   ## @param RSMB_ID.indexer The indexer instance whose API will be used to query the needed metadata.
-  ## @param RSMB_ID.serviceAccountSecret The reference to a secret that contains a key.json key and the contents of a Google Service Account JSON file as its contents.
-  ##
-  gcsResubmitter:
-    broker: someKafkaBroker
-    storage: someGCSStorage
-    indexer: kafkaIndexer
-    serviceAccountSecret:
   ## @param RSMB_ID.clientID The Client ID of the Azure Service Principal with the required role assignments.
   ## @param RSMB_ID.clientSecret The Client Secret of the Azure Service Principal with the required role assignments.
   ## @param RSMB_ID.tenantID The Tenant ID of the Azure Service Principal with the required role assignments.
   ##
-  absResubmitter:
-    broker: somePubSubBroker
-    storage: someGCSStorage
+  kafkaResubmitter:
+    broker: someKafkaBroker
+    storage: someAbsStorage
     indexer: kafkaIndexer
     clientID:
     clientSecret:
     tenantID:
+  ## Pub/Sub resubmitter example configuration.
+  ## @param RSMB_ID.serviceAccountSecret The reference to a secret that contains a key.json key and the contents of a Google Service Account JSON file as its contents.
+  ##
+  ## pubSubResubmitter:
+  ##   broker: somePubSubBroker
+  ##   storage: someGcsStorage
+  ##   indexer: pubSubIndexer
+  ##   serviceAccountSecret:
 
 ## The object containing the information on all of the Persistors to be deployed as part of the Helm installation.
 ##
@@ -117,37 +119,38 @@ persistor:
     broker: someKafkaBroker
     topic: input-topic
     consumerID: input-topic-sub
-    storage: someGCSStorage
+    storage: someAbsStorage
     storageTargetID:
     indexer: kafkaIndexer
     deadletterTopic: dl-topic
     replicas: 1
-    storageCustomValues: "project:dataphos"
-    storageMask: "project/product/year/month/day/hour"
+    storageCustomValues: project:dataphos
+    storageMask: project/year/month/day/hour
     clientID:
     clientSecret:
     tenantID:
+  ## GCS Persistor example configuration.
   ## @param IDX_ID.batchSize Maximum number of messages in a batch.
   ## @param IDX_ID.batchMemory Maximum bytes in batch.
   ## @param IDX_ID.batchTimeout Time to wait before writing batch if it is not full.
   ## @param IDX_ID.serviceAccountSecret The reference to a secret that contains a key.json key and the contents of a Google Service Account JSON file as its contents.
   ##
-  gcsPes:
-    broker: somePubSubBroker
-    pullMode: batch
-    topic: input-topic-2
-    consumerID: input-topic-sub-2
-    storage: someGCSStorage
-    storageTargetID: bucket1
-    deadletterBroker: somePubSubBroker
-    deadletterTopic: dl-topic-2
-    batchSize: 5000
-    batchMemory: 1000000
-    batchTimeout: 30s
-    serviceAccountSecret:
-    replicas: 2
+  ## gcsPes:
+  ##   broker: somePubSubBroker
+  ##   pullMode: batch
+  ##   topic: input-topic-2
+  ##   consumerID: input-topic-sub-2
+  ##   storage: someGcsStorage
+  ##   storageTargetID: bucket1
+  ##   deadletterBroker: somePubSubBroker
+  ##   deadletterTopic: dl-topic-2
+  ##   batchSize: 5000
+  ##   batchMemory: 1000000
+  ##   batchTimeout: 30s
+  ##   serviceAccountSecret:
+  ##   replicas: 2
 
-## The object containing the general information on the brokers the validator service will want to associate with.
+## The object containing the general information on the brokers the Persistor service(s) will want to associate with.
 ##
 brokers:
   ## The object representing an individual broker's configuration.
@@ -157,29 +160,32 @@ brokers:
   someKafkaBroker:
     type: kafka
     brokerAddr:
+  ## Further broker examples. Uncomment the type of broker needed.
   ## @param BROKER_ID.projectID The GCP project ID.
   ##
-  somePubSubBroker:
-    type: pubsub
-    projectID:
+  ## somePubSubBroker:
+  ##   type: pubsub
+  ##   projectID:
   ## @param BROKER_ID.connectionString The Azure Service Bus Namespace connection string.
   ##
-  someServiceBusBroker:
-    type: servicebus
-    connectionString:
+  ## someServiceBusBroker:
+  ##   type: servicebus
+  ##   connectionString:
 
 ## The object containing the general information on the storage services the Persistor service(s) will want to associate with.
 ##
 storage:
   ## The object representing an individual storage destination configuration.
   ## @param STORAGE_ID.type Denotes the storage type.
-  ## @param STORAGE_ID.projectID The GCP project ID.
-  ##
-  someGCSStorage:
-    type: gcs
-    projectID:
   ## @param STORAGE_ID.accountStorageID The Azure Storage Account name.
   ##
-  someABSStorage:
+  someAbsStorage:
     type: abs
     accountStorageID:
+  ## GCS storage example configuration.
+  ## @param STORAGE_ID.projectID The GCP project ID.
+  ##
+  ## someGcsStorage:
+  ##   type: gcs
+  ##   projectID:
+  

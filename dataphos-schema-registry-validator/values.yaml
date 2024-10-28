@@ -55,17 +55,18 @@ validator:
     validTopic: valid-topic
     deadletterTopic: deadletter-topic
     replicas: 1
+  ## Another example of an individual validator's configuration. Uncomment this section to deploy it along the first one.
   ## @param VAL_ID.serviceAccountSecret The reference to a secret that contains a key.json key and the contents of a Google Service Account JSON file as its contents.
   ##
-  val2:
-    broker: somePubSubBroker
-    destinationBroker: somePubSubBroker
-    topic: input-topic
-    consumerID: input-topic-sub
-    validTopic: valid-topic
-    deadletterTopic: deadletter-topic
-    serviceAccountSecret:
-    replicas: 1
+  ## val2:
+  ##   broker: somePubSubBroker
+  ##   destinationBroker: somePubSubBroker
+  ##   topic: input-topic
+  ##   consumerID: input-topic-sub
+  ##   validTopic: valid-topic
+  ##   deadletterTopic: deadletter-topic
+  ##   serviceAccountSecret:
+  ##   replicas: 1
 
 ## The object containing the general information on the brokers the validator service will want to associate with.
 ##
@@ -77,13 +78,14 @@ brokers:
   someKafkaBroker:
     type: kafka
     brokerAddr:
+  ## Further broker examples. Uncomment the type of broker needed.
   ## @param BROKER_ID.projectID The GCP project ID.
   ##
-  somePubSubBroker:
-    type: pubsub
-    projectID:
+  ## somePubSubBroker:
+  ##   type: pubsub
+  ##   projectID:
   ## @param BROKER_ID.connectionString The Azure Service Bus Namespace connection string.
   ##
-  someServiceBusBroker:
-    type: servicebus
-    connectionString:
+  ## someServiceBusBroker:
+  ##   type: servicebus
+  ##   connectionString:
