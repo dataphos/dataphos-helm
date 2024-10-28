@@ -8,7 +8,7 @@ apiVersion: apps/v1
 kind: StatefulSet
 metadata:
   name: per-idx-mongo-{{ $idx }}
-  namespace: {{ $.Values.namespace }}
+  namespace: {{ $.Values.namespace | default "dataphos" }}
 spec:
   selector:
     matchLabels:
@@ -22,7 +22,7 @@ spec:
       terminationGracePeriodSeconds: 10
       containers:
         - name: mongo
-          image: {{ $.Values.images.indexerMongoDb }}
+          image: {{ (($.Values.images).indexerMongoDb) | default "mongo:4.0" }}
           command:
             - mongod
             - "--bind_ip"
@@ -47,7 +47,7 @@ apiVersion: v1
 kind: Service
 metadata:
   name: per-idx-mongo-{{ $idx }}-svc
-  namespace: {{ $.Values.namespace }}
+  namespace: {{ $.Values.namespace | default "dataphos" }}
   labels:
     name: per-idx-mongo-{{ $idx }}
 spec:
@@ -63,7 +63,7 @@ apiVersion: v1
 kind: Service
 metadata:
   name: per-idx-api-{{ $idx }}-svc
-  namespace: {{ $.Values.namespace }}
+  namespace: {{ $.Values.namespace | default "dataphos" }}
   labels:
     app: per-idx-api-{{ $idx }}
 spec:
@@ -77,7 +77,7 @@ apiVersion: v1
 kind: ConfigMap
 metadata:
   name: per-idx-api-{{ $idx }}-config
-  namespace: {{ $.Values.namespace }}
+  namespace: {{ $.Values.namespace | default "dataphos" }}
 data:
   CONN: {{ $mongoConnectionString }}
   DATABASE: "indexer_db"
@@ -86,7 +86,7 @@ apiVersion: apps/v1
 kind: Deployment
 metadata:
   name: per-idx-api-{{ $idx }}
-  namespace: {{ $.Values.namespace }}
+  namespace: {{ $.Values.namespace | default "dataphos" }}
 spec:
   replicas: {{ $target.replicas }}
   selector:
@@ -99,7 +99,7 @@ spec:
     spec:
       containers:
         - name: indexer-api-{{ $idx }}
-          image: {{ $.Values.images.indexerApi }}
+          image: {{ (($.Values.images).indexerApi) | default "syntioinc/dataphos-persistor-indexer-api:1.0.0" }}
           envFrom:
             - configMapRef:
                 name: per-idx-api-{{ $idx }}-config
@@ -108,7 +108,7 @@ apiVersion: v1
 kind: ConfigMap
 metadata:
   name: per-idx-{{ $idx }}-config
-  namespace: {{ $.Values.namespace }}
+  namespace: {{ $.Values.namespace | default "dataphos" }}
 data:
     # Reader configuration.
     READER_TYPE: {{ $indexerBroker.type }}
@@ -157,7 +157,7 @@ apiVersion: apps/v1
 kind: Deployment
 metadata:
   name: per-idx-{{ $idx }}
-  namespace: {{ $.Values.namespace }}
+  namespace: {{ $.Values.namespace | default "dataphos" }}
 spec:
   replicas: {{ $target.consumerReplicas }}
   selector:
@@ -170,7 +170,7 @@ spec:
     spec:
       containers:
         - name: indexer
-          image: {{ $.Values.images.indexer }}
+          image: {{ (($.Values.images).indexer) | default "syntioinc/dataphos-persistor-indexer:1.0.0" }}
           envFrom:
             - configMapRef:
                 name: per-idx-{{ $idx }}-config
@@ -196,7 +196,7 @@ data:
   key.json: {{ $target.serviceAccountKey }}
 metadata:
   name: {{ $target.serviceAccountSecret }}
-  namespace: {{ $.Values.namespace }}
+  namespace: {{ $.Values.namespace | default "dataphos" }}
 type: Opaque
 {{- end }}
 ---
@@ -204,7 +204,7 @@ apiVersion: v1
 kind: Service
 metadata:
   name: "per-idx-{{ $idx }}-metrics-svc"
-  namespace: {{ $.Values.namespace }}
+  namespace: {{ $.Values.namespace | default "dataphos" }}
   labels:
     app: per-idx-{{ $idx }}
 spec:

@@ -11,7 +11,7 @@ apiVersion: v1
 kind: ConfigMap
 metadata:
   name: per-{{ $per }}-config
-  namespace: {{ $.Values.namespace }}
+  namespace: {{ $.Values.namespace | default "dataphos" }}
 data:
   # Reader configuration.
   READER_TYPE: {{ $broker.type }}
@@ -84,7 +84,7 @@ apiVersion: apps/v1
 kind: Deployment
 metadata:
   name: per-{{ $per }}
-  namespace: {{ $.Values.namespace }}
+  namespace: {{ $.Values.namespace | default "dataphos" }}
 spec:
   replicas: {{ $target.replicas }}
   selector:
@@ -97,7 +97,7 @@ spec:
     spec:
       containers:
         - name: persistor
-          image: {{ $.Values.images.persistor }}
+          image: {{ $.Values.images.persistor | default "syntioinc/dataphos-persistor-core:1.0.0" }}
           envFrom:
             - configMapRef:
                 name: per-{{ $per }}-config
@@ -123,7 +123,7 @@ data:
   key.json: {{ $target.serviceAccountKey }}
 metadata:
   name: {{ $target.serviceAccountSecret }}
-  namespace: {{ $.Values.namespace }}
+  namespace: {{ $.Values.namespace | default "dataphos" }}
 type: Opaque
 {{- end }}
 ---
@@ -131,7 +131,7 @@ apiVersion: v1
 kind: Service
 metadata:
   name: "per-{{ $per }}-metrics-svc"
-  namespace: {{ $.Values.namespace }}
+  namespace: {{ $.Values.namespace | default "dataphos" }}
   labels:
     app: per-{{ $per }}
 spec:

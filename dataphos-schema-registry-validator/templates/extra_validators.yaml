@@ -1,11 +1,11 @@
 
 # CSV Validator
-{{- if .Values.csvValidator.enable }}
+{{- if ((.Values.csvValidator).enable) }}
 apiVersion: v1
 kind: Service
 metadata:
   name: validator-csv-svc
-  namespace: {{ .Values.namespace }}
+  namespace: {{ .Values.namespace | default "dataphos" }}
   labels:
     app: validator-csv
 spec:
@@ -20,11 +20,11 @@ apiVersion: apps/v1
 kind: Deployment
 metadata:
   name: validator-csv
-  namespace: {{ .Values.namespace }}
+  namespace: {{ .Values.namespace | default "dataphos" }}
   annotations:
     "syntio.net/logme": "true"
 spec:
-  replicas: {{ .Values.csvValidator.replicas }}
+  replicas: {{ ((.Values.csvValidator).replicas) | default 1 }}
   selector:
     matchLabels:
       app: validator-csv
@@ -35,17 +35,17 @@ spec:
     spec:
       containers:
         - name: validator-csv
-          image: {{ .Values.images.csvValidator }}
+          image: {{ ((.Values.images).csvValidator) | default "syntioinc/dataphos-schema-registry-csv-val:1.0.0" }}
 ---
 {{- end}}
 
 # XML Validator
-{{- if .Values.xmlValidator.enable }}
+{{- if ((.Values.xmlValidator).enable) }}
 apiVersion: v1
 kind: Service
 metadata:
   name: validator-xml-svc
-  namespace: {{ .Values.namespace }}
+  namespace: {{ .Values.namespace | default "dataphos" }}
   labels:
     app: validator-xml
 spec:
@@ -60,11 +60,11 @@ apiVersion: apps/v1
 kind: Deployment
 metadata:
   name: validator-xml
-  namespace: {{ .Values.namespace }}
+  namespace: {{ .Values.namespace | default "dataphos" }}
   annotations:
     "syntio.net/logme": "true"
 spec:
-  replicas: {{ .Values.xmlValidator.replicas }}
+  replicas: {{ ((.Values.xmlValidator).replicas) | default 1 }}
   selector:
     matchLabels:
       app: validator-xml
@@ -75,5 +75,5 @@ spec:
     spec:
       containers:
         - name: validator-xml
-          image: {{ .Values.images.xmlValidator }}
+          image: {{ ((.Values.images).xmlValidator) | default "syntioinc/dataphos-schema-registry-xml-val:1.0.0" }}
 {{- end}}

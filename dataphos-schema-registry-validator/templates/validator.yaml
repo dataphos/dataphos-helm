@@ -6,7 +6,7 @@ apiVersion: v1
 kind: ConfigMap
 metadata:
   name: scval-{{ $id }}-config
-  namespace: {{ $.Values.namespace }}
+  namespace: {{ $.Values.namespace | default "dataphos" }}
 data:
 
   # General settings.
@@ -50,7 +50,7 @@ apiVersion: v1
 kind: Service
 metadata:
   name: scval-{{ $id }}-metrics-svc
-  namespace: {{ $.Values.namespace }}
+  namespace: {{ $.Values.namespace | default "dataphos" }}
 spec:
   ports:
     - name: metrics
@@ -64,7 +64,7 @@ apiVersion: apps/v1
 kind: Deployment
 metadata:
   name: scval-{{ $id }}
-  namespace: {{ $.Values.namespace }}
+  namespace: {{ $.Values.namespace | default "dataphos" }}
   annotations:
     "syntio.net/logme": "true"
 spec:
@@ -83,7 +83,7 @@ spec:
           command: ["sh", "-c", "sleep 60s;"]
       containers:
         - name: validator
-          image: {{ $.Values.images.validator }}
+          image: {{ $.Values.images.validator | default "syntioinc/dataphos-schema-registry-validator:1.0.0"}}
           envFrom:
             - configMapRef:
                 name: scval-{{ $id }}-config
@@ -109,7 +109,7 @@ data:
   key.json: {{ $target.serviceAccountKey }}
 metadata:
   name: {{ $target.serviceAccountSecret }}
-  namespace: {{ $.Values.namespace }}
+  namespace: {{ $.Values.namespace | default "dataphos" }}
 type: Opaque
 {{- end }}
 ---
