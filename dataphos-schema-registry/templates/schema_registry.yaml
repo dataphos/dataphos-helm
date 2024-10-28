@@ -115,7 +115,7 @@ spec:
       maxSurge: 1
       maxUnavailable: 1
     type: RollingUpdate
-  replicas: {{ .Values.registryReplicas }}
+  replicas: {{ .Values.registryReplicas | default 1 }}
   selector:
     matchLabels:
       app: schema-registry

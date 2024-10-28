@@ -86,7 +86,7 @@ metadata:
   name: per-{{ $per }}
   namespace: {{ $.Values.namespace | default "dataphos" }}
 spec:
-  replicas: {{ $target.replicas }}
+  replicas: {{ $target.replicas | default 1 }}
   selector:
     matchLabels:
       app: per-{{ $per }}

@@ -68,7 +68,7 @@ metadata:
   annotations:
     "syntio.net/logme": "true"
 spec:
-  replicas: {{ $target.replicas }}
+  replicas: {{ $target.replicas | default 1 }}
   selector:
     matchLabels:
       app: scval-{{ $id }}

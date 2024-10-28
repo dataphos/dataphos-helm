@@ -88,7 +88,7 @@ metadata:
   name: per-idx-api-{{ $idx }}
   namespace: {{ $.Values.namespace | default "dataphos" }}
 spec:
-  replicas: {{ $target.replicas }}
+  replicas: {{ $target.replicas | default 1 }}
   selector:
     matchLabels:
       app: per-idx-api-{{ $idx }}
@@ -159,7 +159,7 @@ metadata:
   name: per-idx-{{ $idx }}
   namespace: {{ $.Values.namespace | default "dataphos" }}
 spec:
-  replicas: {{ $target.consumerReplicas }}
+  replicas: {{ $target.consumerReplicas | default 1 }}
   selector:
     matchLabels:
       app: per-idx-{{ $idx }}
