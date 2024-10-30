@@ -1,35 +1,30 @@
-{{- $namespace := .Values.namespace | default "dataphos" -}}
-{{- $initdb := ((.Values.images).initdb) | default "syntioinc/dataphos-schema-registry-initdb:1.0.0" -}}
-{{- $registry := ((.Values.images).registry) | default "syntioinc/dataphos-schema-registry-api:1.0.0" -}}
-{{- $compatibilityChecker := ((.Values.images).compatibilityChecker) | default "syntioinc/dataphos-schema-registry-compatibility:1.0.0" -}}
-{{- $validityChecker := ((.Values.images).validityChecker) | default "syntioinc/dataphos-schema-registry-validity:1.0.0" -}}
 apiVersion: v1
 kind: Secret
 metadata:
   name: schema-history-secret
-  namespace: {{ $namespace }}
+  namespace: {{ .Values.namespace }}
 stringData:
-  POSTGRES_PASSWORD: {{ ((.Values.database).password) | default "POSTGRES_PASSWORD" }}
+  POSTGRES_PASSWORD: {{ .Values.database.password }}
   PGDATA: /var/lib/postgresql/data/pgdata
 ---
 apiVersion: v1
 kind: Secret
 metadata:
   name: schema-registry-secret
-  namespace: {{ $namespace }}
+  namespace: {{ .Values.namespace }}
 stringData:
   SR_HOST: schema-history-svc
   SR_TABLE_PREFIX: syntio_schema.
-  SR_DBNAME: {{ ((.Values.database).name) | default "postgres" }}
-  SR_USER: {{ ((.Values.database).username) | default "postgres" }}
-  SR_PASSWORD: {{ ((.Values.database).password) | default "POSTGRES_PASSWORD" }}
+  SR_DBNAME: {{ .Values.database.name }}
+  SR_USER: {{ .Values.database.username }}
+  SR_PASSWORD: {{ .Values.database.password }}
   SERVER_PORT: "8080"
 ---
 apiVersion: v1
 kind: Service
 metadata:
   name: schema-history-svc
-  namespace: {{ $namespace }}
+  namespace: {{ .Values.namespace }}
 spec:
   ports:
     - protocol: TCP
@@ -43,7 +38,7 @@ apiVersion: apps/v1
 kind: StatefulSet
 metadata:
   name: schema-history
-  namespace: {{ $namespace }}
+  namespace: {{ .Values.namespace }}
   annotations:
     "syntio.net/logme": "true"
 spec:
@@ -91,7 +86,7 @@ apiVersion: v1
 kind: Service
 metadata:
   name: {{ .Values.registrySvcName | default "schema-registry-svc" }}
-  namespace: {{ $namespace }}
+  namespace: {{ .Values.namespace }}
 spec:
   ports:
     - name: http
@@ -111,7 +106,7 @@ apiVersion: apps/v1
 kind: Deployment
 metadata:
   name: schema-registry
-  namespace: {{ $namespace }}
+  namespace: {{ .Values.namespace }}
   annotations:
     "syntio.net/logme": "true"
 spec:
@@ -120,7 +115,7 @@ spec:
       maxSurge: 1
       maxUnavailable: 1
     type: RollingUpdate
-  replicas: {{ .Values.registryReplicas | default 1 }}
+  replicas: {{ .Values.registryReplicas }}
   selector:
     matchLabels:
       app: schema-registry
@@ -134,7 +129,7 @@ spec:
           image: subfuzion/netcat
           command: [ 'sh', '-c', 'sleep 60s;' ]
         - name: initdb
-          image: {{ $initdb }}
+          image: {{ .Values.images.initdb }}
           env:
             - name: SR_PASSWORD
               valueFrom:
@@ -165,7 +160,7 @@ spec:
             privileged: true
       containers:
         - name: sr
-          image: {{ $registry }}
+          image: {{ .Values.images.registry }}
           env:
             - name: SR_PASSWORD
               valueFrom:
@@ -212,12 +207,12 @@ spec:
             - name: http
               containerPort: 8080
         - name: compatibility-checker
-          image: {{ $compatibilityChecker }}
+          image: {{ .Values.images.compatibilityChecker }}
           ports:
             - name: compatibility
               containerPort: 8088
         - name: validity-checker
-          image: {{ $validityChecker }}
+          image: {{ .Values.images.validityChecker }}
           ports:
             - name: validity
               containerPort: 8089
