@@ -1,8 +1,92 @@
-# Default values for dataphos-schema-registry-validator.
 
+
+## @param namespace The namespace to deploy the Schema Registry into.
+##
 namespace: dataphos
 
+## Docker images to use for each of the individual Schema Registry sub-components.
+## @param images.validator The Schema Registry Validator image.
+## @param images.xmlValidator The XML Validator image.
+## @param images.csvValidator The CSV Validator image.
+##
 images:
   validator: syntioinc/dataphos-schema-registry-validator:1.0.0
   xmlValidator: syntioinc/dataphos-schema-registry-xml-val:1.0.0
   csvValidator: syntioinc/dataphos-schema-registry-csv-val:1.0.0
+
+## The XML Validator configuration.
+## @param xmlValidator.enable Determines whether the XML Validator should be enabled.
+## @param xmlValidator.replicas The number of XML Validator replicas.
+##
+xmlValidator:
+  enable: true
+  replicas: 1
+
+## The CSV Validator configuration.
+## @param csvValidator.enable Determines whether the CSV Validator should be enabled.
+## @param csvValidator.replicas The number of CSV Validator replicas.
+##
+csvValidator:
+  enable: true
+  replicas: 1
+
+## @param schemaRegistryURL The link to the Schema Registry component.
+##
+schemaRegistryURL: "http://schema-registry-svc:8080"
+
+## The object containing the information on all of the Validators to be deployed as part of the Helm installation.
+## Leaving multiple configuration objects uncommented results in multiple Validator deployments.
+##
+validator:
+
+  ## The object representing the individual Validator's configuration.
+  ## @param VAL_ID.broker Reference to the broker messages are pulled FROM.
+  ## @param VAL_ID.destinationBroker Reference to the broker messages are sent TO.
+  ## @param VAL_ID.topic The topic the messages are pulled FROM.
+  ## @param VAL_ID.consumerID The consumer identifier (subscription, consumer group, etc).
+  ## @param VAL_ID.validTopic The topic VALID messages are sent TO.
+  ## @param VAL_ID.deadletterTopic The topic INVALID messages are sent TO.
+  ## @param VAL_ID.replicas The number of replicas of a given Validator instance to pull/process messages simultaneously.
+  ##
+  val1:
+    broker: someKafkaBroker
+    destinationBroker: someKafkaBroker
+    topic: input-topic
+    consumerID: input-topic-sub
+    validTopic: valid-topic
+    deadletterTopic: deadletter-topic
+    replicas: 1
+  ## Another example of an individual Validator's configuration. Uncomment this section to deploy it along the first one.
+  ## @param VAL_ID.serviceAccountSecret The reference to a secret that contains a key.json key and the contents of a Google Service Account JSON file as its contents.
+  ##
+  ## val2:
+  ##   broker: somePubSubBroker
+  ##   destinationBroker: somePubSubBroker
+  ##   topic: input-topic
+  ##   consumerID: input-topic-sub
+  ##   validTopic: valid-topic
+  ##   deadletterTopic: deadletter-topic
+  ##   serviceAccountSecret:
+  ##   replicas: 1
+
+## The object containing the general information on the brokers the Validator service will want to associate with.
+##
+brokers:
+  ## The object representing an individual broker's configuration.
+  ## @param BROKER_ID.type Denotes the broker's type.
+  ## @param BROKER_ID.brokerAddr The Kafka bootstrap server address.
+  ##
+  someKafkaBroker:
+    type: kafka
+    brokerAddr:
+  ## Further broker examples. Uncomment the type of broker needed.
+  ## @param BROKER_ID.projectID The GCP project ID.
+  ##
+  ## somePubSubBroker:
+  ##   type: pubsub
+  ##   projectID:
+  ## @param BROKER_ID.connectionString The Azure Service Bus Namespace connection string.
+  ##
+  ## someServiceBusBroker:
+  ##   type: servicebus
+  ##   connectionString:
