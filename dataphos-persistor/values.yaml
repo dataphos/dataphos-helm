@@ -19,6 +19,7 @@ images:
   resubmitter: syntioinc/dataphos-persistor-resubmitter:1.0.0
 
 ## The object containing the information on all of the indexer(s) to be deployed as part of the Helm installation.
+## Leaving multiple configuration objects uncommented results in multiple indexer deployments.
 ##
 indexer:
 
@@ -70,6 +71,7 @@ indexer:
   ##   mongoConnectionString:
 
 ## The object containing the information on all of the resubmitter services to be deployed as part of the Helm installation.
+## Leaving multiple configuration objects uncommented results in multiple resubmitter deployments.
 ##
 resubmitter:
 
@@ -88,7 +90,7 @@ resubmitter:
     clientID:
     clientSecret:
     tenantID:
-  ## Pub/Sub resubmitter example configuration.
+  ## If a Pub/Sub resubmitter is needed instead of a Kafka one, uncomment this section.
   ## @param RSMB_ID.serviceAccountSecret The reference to a secret that contains a key.json key and the contents of a Google Service Account JSON file as its contents.
   ##
   ## pubSubResubmitter:
@@ -98,6 +100,7 @@ resubmitter:
   ##   serviceAccountSecret:
 
 ## The object containing the information on all of the Persistors to be deployed as part of the Helm installation.
+## Leaving multiple configuration objects uncommented results in multiple Persistor deployments.
 ##
 persistor:
 
@@ -129,7 +132,7 @@ persistor:
     clientID:
     clientSecret:
     tenantID:
-  ## GCS Persistor example configuration.
+  ## Uncomment this section to create a Persistor instance working with Pub/Sub and GCS instead of Kafka and ABS.
   ## @param IDX_ID.batchSize Maximum number of messages in a batch.
   ## @param IDX_ID.batchMemory Maximum bytes in batch.
   ## @param IDX_ID.batchTimeout Time to wait before writing batch if it is not full.

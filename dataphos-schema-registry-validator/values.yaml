@@ -35,6 +35,7 @@ csvValidator:
 schemaRegistryURL: "http://schema-registry-svc:8080"
 
 ## The object containing the information on all of the validators to be deployed as part of the Helm installation.
+## Leaving multiple configuration objects uncommented results in multiple validator deployments.
 ##
 validator:
 
