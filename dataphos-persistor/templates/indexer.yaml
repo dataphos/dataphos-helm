@@ -1,14 +1,19 @@
 {{- range $idx, $target := .Values.indexer }}
+{{- $idx := kebabcase $idx -}}
 {{- $indexerBroker := get $.Values.brokers $target.broker -}}
 {{- $enableDeadletter := $target.deadletterTopic -}}
 {{- $mongoConnectionString := $target.mongoConnectionString | default (printf "mongodb://per-idx-mongo-%s-0.per-idx-mongo-%s-svc.%s:27017" $idx $idx $.Values.namespace) -}}
 {{- $isGcp := eq $indexerBroker.type "pubsub" -}}
+{{- $namespace := $.Values.namespace | default "dataphos" -}}
+{{- $indexerMongoDb := (($.Values.images).indexerMongoDb) | default "mongo:4.0" -}}
+{{- $indexerApi := (($.Values.images).indexerApi) | default "syntioinc/dataphos-persistor-indexer-api:1.0.0" -}}
+{{- $indexer := (($.Values.images).indexer) | default "syntioinc/dataphos-persistor-indexer:1.0.0" -}}
 {{- if not $target.mongoConnectionString }}
 apiVersion: apps/v1
 kind: StatefulSet
 metadata:
   name: per-idx-mongo-{{ $idx }}
-  namespace: {{ $.Values.namespace }}
+  namespace: {{ $namespace }}
 spec:
   selector:
     matchLabels:
@@ -22,7 +27,7 @@ spec:
       terminationGracePeriodSeconds: 10
       containers:
         - name: mongo
-          image: {{ $.Values.images.indexerMongoDb }}
+          image: {{ $indexerMongoDb }}
           command:
             - mongod
             - "--bind_ip"
@@ -47,7 +52,7 @@ apiVersion: v1
 kind: Service
 metadata:
   name: per-idx-mongo-{{ $idx }}-svc
-  namespace: {{ $.Values.namespace }}
+  namespace: {{ $namespace }}
   labels:
     name: per-idx-mongo-{{ $idx }}
 spec:
@@ -63,7 +68,7 @@ apiVersion: v1
 kind: Service
 metadata:
   name: per-idx-api-{{ $idx }}-svc
-  namespace: {{ $.Values.namespace }}
+  namespace: {{ $namespace }}
   labels:
     app: per-idx-api-{{ $idx }}
 spec:
@@ -77,7 +82,7 @@ apiVersion: v1
 kind: ConfigMap
 metadata:
   name: per-idx-api-{{ $idx }}-config
-  namespace: {{ $.Values.namespace }}
+  namespace: {{ $namespace }}
 data:
   CONN: {{ $mongoConnectionString }}
   DATABASE: "indexer_db"
@@ -86,9 +91,9 @@ apiVersion: apps/v1
 kind: Deployment
 metadata:
   name: per-idx-api-{{ $idx }}
-  namespace: {{ $.Values.namespace }}
+  namespace: {{ $namespace }}
 spec:
-  replicas: {{ $target.replicas }}
+  replicas: {{ $target.replicas | default 1 }}
   selector:
     matchLabels:
       app: per-idx-api-{{ $idx }}
@@ -99,7 +104,7 @@ spec:
     spec:
       containers:
         - name: indexer-api-{{ $idx }}
-          image: {{ $.Values.images.indexerApi }}
+          image: {{ $indexerApi }}
           envFrom:
             - configMapRef:
                 name: per-idx-api-{{ $idx }}-config
@@ -108,7 +113,7 @@ apiVersion: v1
 kind: ConfigMap
 metadata:
   name: per-idx-{{ $idx }}-config
-  namespace: {{ $.Values.namespace }}
+  namespace: {{ $namespace }}
 data:
     # Reader configuration.
     READER_TYPE: {{ $indexerBroker.type }}
@@ -147,8 +152,8 @@ data:
     MONGO_COLLECTION: "indexer_collection"
 
     # Batch settings.
-    BATCHSETTINGS_BATCHSIZE: "{{ $target.batchSize | default 5000 }}"
-    BATCHSETTINGS_BATCHMEMORY: "{{ $target.batchMemory | default 1000000 }}"
+    BATCHSETTINGS_BATCHSIZE: {{ $target.batchSize | default 5000 | quote }}
+    BATCHSETTINGS_BATCHMEMORY: {{ $target.batchMemory | default 1000000 | quote }}
     BATCHSETTINGS_BATCHTIMEOUT: {{ $target.batchTimeout | default "30s" }}
 
     MINIMUM_LOG_LEVEL: "INFO"
@@ -157,9 +162,9 @@ apiVersion: apps/v1
 kind: Deployment
 metadata:
   name: per-idx-{{ $idx }}
-  namespace: {{ $.Values.namespace }}
+  namespace: {{ $namespace }}
 spec:
-  replicas: {{ $target.consumerReplicas }}
+  replicas: {{ $target.consumerReplicas | default 1 }}
   selector:
     matchLabels:
       app: per-idx-{{ $idx }}
@@ -170,7 +175,7 @@ spec:
     spec:
       containers:
         - name: indexer
-          image: {{ $.Values.images.indexer }}
+          image: {{ $indexer }}
           envFrom:
             - configMapRef:
                 name: per-idx-{{ $idx }}-config
@@ -196,15 +201,15 @@ data:
   key.json: {{ $target.serviceAccountKey }}
 metadata:
   name: {{ $target.serviceAccountSecret }}
-  namespace: {{ $.Values.namespace }}
+  namespace: {{ $namespace }}
 type: Opaque
 {{- end }}
 ---
 apiVersion: v1
 kind: Service
 metadata:
-  name: "per-idx-{{ $idx }}-metrics-svc"
-  namespace: {{ $.Values.namespace }}
+  name: per-idx-{{ $idx }}-metrics-svc
+  namespace: {{ $namespace }}
   labels:
     app: per-idx-{{ $idx }}
 spec:
