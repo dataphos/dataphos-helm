@@ -15,7 +15,7 @@ images:
   csvValidator: syntioinc/dataphos-schema-registry-csv-val:1.0.0
 
 ## The XML Validator configuration.
-## @param xmlValidator.enable Determines whether the XML validator should be enabled.
+## @param xmlValidator.enable Determines whether the XML Validator should be enabled.
 ## @param xmlValidator.replicas The number of XML Validator replicas.
 ##
 xmlValidator:
@@ -23,7 +23,7 @@ xmlValidator:
   replicas: 1
 
 ## The CSV Validator configuration.
-## @param csvValidator.enable Determines whether the CSV validator should be enabled.
+## @param csvValidator.enable Determines whether the CSV Validator should be enabled.
 ## @param csvValidator.replicas The number of CSV Validator replicas.
 ##
 csvValidator:
@@ -34,19 +34,19 @@ csvValidator:
 ##
 schemaRegistryURL: "http://schema-registry-svc:8080"
 
-## The object containing the information on all of the validators to be deployed as part of the Helm installation.
-## Leaving multiple configuration objects uncommented results in multiple validator deployments.
+## The object containing the information on all of the Validators to be deployed as part of the Helm installation.
+## Leaving multiple configuration objects uncommented results in multiple Validator deployments.
 ##
 validator:
 
-  ## The object representing the individual validator's configuration.
+  ## The object representing the individual Validator's configuration.
   ## @param VAL_ID.broker Reference to the broker messages are pulled FROM.
   ## @param VAL_ID.destinationBroker Reference to the broker messages are sent TO.
   ## @param VAL_ID.topic The topic the messages are pulled FROM.
   ## @param VAL_ID.consumerID The consumer identifier (subscription, consumer group, etc).
   ## @param VAL_ID.validTopic The topic VALID messages are sent TO.
   ## @param VAL_ID.deadletterTopic The topic INVALID messages are sent TO.
-  ## @param VAL_ID.replicas The number of replicas of a given validator instance to pull/process messages simultaneously.
+  ## @param VAL_ID.replicas The number of replicas of a given Validator instance to pull/process messages simultaneously.
   ##
   val1:
     broker: someKafkaBroker
@@ -56,7 +56,7 @@ validator:
     validTopic: valid-topic
     deadletterTopic: deadletter-topic
     replicas: 1
-  ## Another example of an individual validator's configuration. Uncomment this section to deploy it along the first one.
+  ## Another example of an individual Validator's configuration. Uncomment this section to deploy it along the first one.
   ## @param VAL_ID.serviceAccountSecret The reference to a secret that contains a key.json key and the contents of a Google Service Account JSON file as its contents.
   ##
   ## val2:
@@ -69,7 +69,7 @@ validator:
   ##   serviceAccountSecret:
   ##   replicas: 1
 
-## The object containing the general information on the brokers the validator service will want to associate with.
+## The object containing the general information on the brokers the Validator service will want to associate with.
 ##
 brokers:
   ## The object representing an individual broker's configuration.

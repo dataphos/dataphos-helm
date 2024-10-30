@@ -7,7 +7,7 @@ namespace: dataphos
 ## Docker images to use for each of the individual Schema Registry sub-components.
 ## @param images.initdb Initdb Docker image.
 ## @param images.registry The Schema Registry image.
-## @param images.compatibilityChecker The compatibility checker image.
+## @param images.compatibilityChecker The Compatibility checker image.
 ## @param images.validityChecker Validity Checker image.
 ##
 images:
