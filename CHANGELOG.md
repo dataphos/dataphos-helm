@@ -1,5 +1,12 @@
 # Changelog
 
+## [1.0.1](https://github.com/dataphos/dataphos-helm/compare/v1.0.0...v1.0.1) (2024-10-30)
+
+
+### Bug Fixes
+
+* configuration values marked as optional to not trigger a nil pointer error when omitted ([668ee36](https://github.com/dataphos/dataphos-helm/commit/668ee36eeb2a174c25cb156700da2f4355d2b6cb))
+
 ## 1.0.0 (2024-10-11)
 
 **Contributors:** 
