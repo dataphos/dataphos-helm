@@ -4,7 +4,7 @@
 {{- $destBroker := get $.Values.brokers $target.destinationBroker -}}
 {{- $isGcp := or (eq $sourceBroker.type "pubsub") (eq  $destBroker.type "pubsub") -}}
 {{- $namespace := $.Values.namespace | default "dataphos" -}}
-{{- $validator := $.Values.images.validator | default "syntioinc/dataphos-schema-registry-validator:1.0.0" -}}
+{{- $validator := (($.Values.images).validator) | default "syntioinc/dataphos-schema-registry-validator:1.0.0" -}}
 apiVersion: v1
 kind: ConfigMap
 metadata:
@@ -48,20 +48,6 @@ data:
   {{- end }}
   TOPICS_VALID: {{ $target.validTopic }}
   TOPICS_DEAD_LETTER: {{ $target.deadletterTopic }}
----
-apiVersion: v1
-kind: Service
-metadata:
-  name: scval-{{ $id }}-metrics-svc
-  namespace: {{ $namespace }}
-spec:
-  ports:
-    - name: metrics
-      port: 2112
-      targetPort: 2112
-  selector:
-    app: scval-{{ $id }}
-  type: LoadBalancer
 ---
 apiVersion: apps/v1
 kind: Deployment

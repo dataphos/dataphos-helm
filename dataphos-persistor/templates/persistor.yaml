@@ -129,19 +129,4 @@ metadata:
   namespace: {{ $namespace }}
 type: Opaque
 {{- end }}
----
-apiVersion: v1
-kind: Service
-metadata:
-  name: "per-{{ $per }}-metrics-svc"
-  namespace: {{ $namespace }}
-  labels:
-    app: per-{{ $per }}
-spec:
-  type: LoadBalancer
-  ports:
-    - port: 2112
-  selector:
-    app: per-{{ $per }}
----
 {{ end }}
