@@ -4,7 +4,7 @@
 {{- $destBroker := get $.Values.brokers $target.destinationBroker -}}
 {{- $isGcp := or (eq $sourceBroker.type "pubsub") (eq  $destBroker.type "pubsub") -}}
 {{- $namespace := $.Values.namespace | default "dataphos" -}}
-{{- $validator := $.Values.images.validator | default "syntioinc/dataphos-schema-registry-validator:1.0.0" -}}
+{{- $validator := (($.Values.images).validator) | default "syntioinc/dataphos-schema-registry-validator:1.0.0" -}}
 apiVersion: v1
 kind: ConfigMap
 metadata:
@@ -17,9 +17,9 @@ data:
   VALIDATORS_ENABLE_JSON: "true"
   VALIDATORS_ENABLE_AVRO: "true"
   VALIDATORS_ENABLE_PROTOBUF: "true"
-  VALIDATORS_ENABLE_CSV: {{ (($.Values.csvValidator).enable) | default "true" | quote }}
+  VALIDATORS_ENABLE_CSV: {{ (($.Values.csvValidator).enable) | default "false" | quote }}
   VALIDATORS_CSV_URL: "http://csv-validator-svc:8080"
-  VALIDATORS_ENABLE_XML: {{ (($.Values.xmlValidator).enable) | default "true" | quote }}
+  VALIDATORS_ENABLE_XML: {{ (($.Values.xmlValidator).enable) | default "false" | quote }}
   VALIDATORS_XML_URL: "http://xml-validator-svc:8080"
 
   # Consumer settings.
