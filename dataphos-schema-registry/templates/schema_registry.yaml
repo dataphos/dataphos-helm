@@ -9,6 +9,8 @@ metadata:
   name: schema-history-secret
   namespace: {{ $namespace }}
 stringData:
+  POSTGRES_DB: {{ ((.Values.database).name) | default "postgres" }}
+  POSTGRES_USER: {{ ((.Values.database).username) | default "postgres" }}
   POSTGRES_PASSWORD: {{ ((.Values.database).password) | default "POSTGRES_PASSWORD" }}
   PGDATA: /var/lib/postgresql/data/pgdata
 ---
@@ -64,6 +66,16 @@ spec:
           ports:
             - containerPort: 5432
           env:
+            - name: POSTGRES_DB
+              valueFrom:
+                secretKeyRef:
+                  name: schema-history-secret
+                  key: POSTGRES_DB
+            - name: POSTGRES_USER
+              valueFrom:
+                secretKeyRef:
+                  name: schema-history-secret
+                  key: POSTGRES_USER
             - name: POSTGRES_PASSWORD
               valueFrom:
                 secretKeyRef:
