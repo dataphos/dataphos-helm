@@ -1,5 +1,12 @@
 # Changelog
 
+## [1.0.2](https://github.com/dataphos/dataphos-helm/compare/v1.0.1...v1.0.2) (2024-11-26)
+
+
+### Bug Fixes
+
+* populated values.yaml files cause issues with pulumi ([067e80a](https://github.com/dataphos/dataphos-helm/commit/067e80a5aee476daaa75429a36e2e2f16eb3f094))
+
 ## [1.0.1](https://github.com/dataphos/dataphos-helm/compare/v1.0.0...v1.0.1) (2024-10-30)
 
 
